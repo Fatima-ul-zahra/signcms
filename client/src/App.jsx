@@ -28,9 +28,6 @@ const NAV = [
   ["Screens", Monitor],
   ["Media Library", Images],
   ["Playlists", Layers],
-  ["Campaigns", CalendarDays],
-  ["Users", Users],
-  ["Settings", Settings],
 ];
 
 const PLACEHOLDER_TEXT = {
