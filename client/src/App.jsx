@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   LayoutDashboard,
@@ -82,6 +81,17 @@ export default function App() {
 
     load();
   }, [token, api, load, logout]);
+
+  // Refresh the data every 15 seconds while the page is open and visible.
+  useEffect(() => {
+    if (!token) return;
+
+    const timer = setInterval(() => {
+      if (document.visibilityState === "visible") load();
+    }, 15000);
+
+    return () => clearInterval(timer);
+  }, [token, load]);
 
   async function run(action) {
     try {
@@ -186,6 +196,17 @@ export default function App() {
     );
   };
 
+  // Delete screen function
+  const deleteScreen = (screen) => {
+    if (!confirm(`Delete screen "${screen.name}"? Its player will disconnect and must be paired again.`)) return;
+
+    return run(() =>
+      api(`/api/screens/${screen.screenId}`, {
+        method: "DELETE",
+      })
+    );
+  };
+
   const assignPlaylist = (screen) => {
     const playlist = data.playlists?.[0];
 
@@ -278,6 +299,7 @@ export default function App() {
             screens={data.screens}
             onPair={pairScreen}
             onAssign={assignPlaylist}
+            onDelete={deleteScreen}
           />
         )}
 
