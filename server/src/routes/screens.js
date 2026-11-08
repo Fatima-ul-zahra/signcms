@@ -56,6 +56,17 @@ screensRouter.post(
   })
 );
 
+screensRouter.delete(
+  "/:id",
+  auth,
+  allow("owner", "admin"),
+  asyncHandler(async (req, res) => {
+    const result = await collection("screens").deleteOne({ screenId: req.params.id });
+    if (!result.deletedCount) return res.sendStatus(404);
+    res.json({ ok: true });
+  })
+);
+
 // ---------- Player (device) ----------
 async function playerAuth(req, res, next) {
   try {
