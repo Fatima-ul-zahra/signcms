@@ -1,4 +1,5 @@
 import React from "react";
+export function Screens({ screens = [], onPair, onAssign, onDelete }) {
 import {
   Monitor, Images, Layers, CalendarDays, Plus, Upload, Play, Wifi, MonitorPlay,
 } from "lucide-react";
