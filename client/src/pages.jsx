@@ -94,6 +94,7 @@ export function Screens({ screens = [], onPair, onAssign }) {
             </div>
             <ScreenStatus status={s.status} />
             <button onClick={() => onAssign(s)}>Assign first playlist</button>
+            <button onClick={() => onDelete(s)} style={{ background: "#42272d", color: "#ff8c9a" }}>Delete</button>
           </div>
         ))}
       </div>
