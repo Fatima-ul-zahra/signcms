@@ -207,18 +207,17 @@ export default function App() {
     );
   };
 
-  const assignPlaylist = (screen) => {
-    const playlist = data.playlists?.[0];
-
-    if (!playlist) return alert("Create a playlist first");
+  const assignPlaylist = (screen, playlistId) => {
+    if (!playlistId) return;
+    const playlist = data.playlists?.find((p) => p._id === playlistId);
 
     return run(async () => {
       await api(`/api/screens/${screen.screenId}/assign-playlist`, {
         method: "POST",
-        body: JSON.stringify({ playlistId: playlist._id }),
+        body: JSON.stringify({ playlistId }),
       });
 
-      alert(`Assigned ${playlist.name}`);
+      alert(`Assigned ${playlist?.name || "playlist"}`);
     });
   };
 
@@ -297,6 +296,7 @@ export default function App() {
         {page === "Screens" && (
           <Screens
             screens={data.screens}
+            playlists={data.playlists}
             onPair={pairScreen}
             onAssign={assignPlaylist}
             onDelete={deleteScreen}
