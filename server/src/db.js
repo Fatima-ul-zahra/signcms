@@ -24,3 +24,8 @@ export function collection(name) {
   if (!db) throw new Error("Database is not connected");
   return db.collection(name);
 }
+
+export function getDb() {
+  if (!db) throw new Error("Database is not connected");
+  return db;
+}
