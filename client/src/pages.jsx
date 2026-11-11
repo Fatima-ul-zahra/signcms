@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Monitor, Images, Layers, CalendarDays, Plus, Upload, Play, Wifi, MonitorPlay,
 } from "lucide-react";
@@ -8,6 +8,21 @@ const ACCEPTED_MEDIA = "image/jpeg,image/png,image/webp,video/mp4";
 
 function Empty({ children }) {
   return <div className="empty">{children}</div>;
+}
+
+// A thumbnail that tries again if the server was still waking up when the page opened.
+function MediaImage({ src, alt }) {
+  const [attempt, setAttempt] = useState(0);
+  return (
+    <img
+      key={attempt}
+      src={attempt ? `${src}?retry=${attempt}` : src}
+      alt={alt}
+      onError={() => {
+        if (attempt < 6) setTimeout(() => setAttempt((n) => n + 1), 5000);
+      }}
+    />
+  );
 }
 
 function ScreenStatus({ status }) {
@@ -129,7 +144,7 @@ export function MediaLibrary({ media = [], onUpload, onDelete }) {
         {media.map((m) => (
           <div className="media-card" key={m._id}>
             {m.mimeType.startsWith("image") ? (
-              <img src={API_URL + m.url} alt={m.name} />
+              <MediaImage src={API_URL + m.url} alt={m.name} />
             ) : (
               <div className="video-thumb"><Play /></div>
             )}
