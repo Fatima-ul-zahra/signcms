@@ -7,7 +7,7 @@ import { connectDb, collection } from "./db.js";
 import { errorHandler } from "./middleware/http.js";
 import authRoutes from "./routes/auth.js";
 import dashboardRoutes from "./routes/dashboard.js";
-import mediaRoutes, { uploadDir } from "./routes/media.js";
+import mediaRoutes, { filesRouter } from "./routes/media.js";
 import { screensRouter, playerRouter } from "./routes/screens.js";
 import { playlistsRouter, campaignsRouter } from "./routes/content.js";
 
@@ -20,7 +20,7 @@ app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(cors({ origin: config.corsOrigins, credentials: false }));
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
-app.use("/uploads", express.static(uploadDir, { dotfiles: "deny", index: false }));
+app.use("/uploads", filesRouter);
 
 app.get("/api/health", (_req, res) => res.json({ ok: true, service: "SignCMS API" }));
 app.use("/api/auth", authRoutes);
