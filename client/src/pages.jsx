@@ -77,7 +77,9 @@ export function Dashboard({ data, onNavigate, onPair, onUpload, onNewPlaylist })
   );
 }
 
-export function Screens({ screens = [], onPair, onAssign, onDelete }) {
+export function Screens({ screens = [], playlists = [], onPair, onAssign, onDelete }) {
+  const playlistName = (id) => playlists.find((p) => p._id === id)?.name;
+
   return (
     <section className="panel">
       <div className="panel-head">
@@ -91,9 +93,19 @@ export function Screens({ screens = [], onPair, onAssign, onDelete }) {
             <div className="grow">
               <b>{s.name}</b>
               <small>{s.screenId ?? s._id}</small>
+              <small>{playlistName(s.playlistId) ? "Playing: " + playlistName(s.playlistId) : "No playlist assigned"}</small>
             </div>
             <ScreenStatus status={s.status} />
-            <button onClick={() => onAssign(s)}>Assign first playlist</button>
+            <select
+              value={s.playlistId || ""}
+              onChange={(e) => onAssign(s, e.target.value)}
+              style={{ background: "#1a1f2c", color: "#c4c9d5", border: "1px solid #2b3242", borderRadius: 7, padding: 7 }}
+            >
+              <option value="" disabled>Choose playlist…</option>
+              {playlists.map((p) => (
+                <option key={p._id} value={p._id}>{p.name}</option>
+              ))}
+            </select>
             <button onClick={() => onDelete(s)} style={{ background: "#42272d", color: "#ff8c9a" }}>Delete</button>
           </div>
         ))}
